@@ -25,6 +25,7 @@ export default function Home() {
   const [newName, setNewName] = useState('')
   const [newSummary, setNewSummary] = useState('')
   const [loading, setLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // 1. 프로필 목록 가져오기
   const fetchProfiles = async () => {
@@ -34,9 +35,13 @@ export default function Home() {
         .select('*')
         .order('created_at', { ascending: false })
 
-      if (data && data.length > 0) {
+      if (error) {
+        console.error('목록 불러오기 에러:', error)
+      } else if (data) {
         setProfiles(data)
-        if (!selectedId) setSelectedId(data[0].id)
+        if (data.length > 0 && !selectedId) {
+          setSelectedId(data[0].id)
+        }
       }
     } catch (e) {
       console.error(e)
@@ -47,13 +52,13 @@ export default function Home() {
 
   // 2. 세션 메모 가져오기
   const fetchLogs = async (customerId: string) => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('session_logs')
       .select('*')
       .eq('customer_id', customerId)
       .order('created_at', { ascending: true })
 
-    if (data) setLogs(data)
+    if (!error && data) setLogs(data)
   }
 
   useEffect(() => {
@@ -67,18 +72,28 @@ export default function Home() {
   // 3. 새 고객 등록
   const handleAddProfile = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newName.trim()) return
+    if (!newName.trim() || isSubmitting) return
 
-    const { data } = await supabase
-      .from('profiles')
-      .insert([{ name: newName, summary: newSummary }])
-      .select()
+    setIsSubmitting(true)
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .insert([{ name: newName.trim(), summary: newSummary.trim() || null }])
+        .select()
 
-    if (data && data.length > 0) {
-      setProfiles([data[0], ...profiles])
-      setSelectedId(data[0].id)
-      setNewName('')
-      setNewSummary('')
+      if (error) {
+        alert(`고객 추가 실패: ${error.message}`)
+        console.error('Insert error:', error)
+      } else if (data && data.length > 0) {
+        setProfiles((prev) => [data[0], ...prev])
+        setSelectedId(data[0].id)
+        setNewName('')
+        setNewSummary('')
+      }
+    } catch (err: any) {
+      alert(`시스템 오류: ${err.message}`)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -87,14 +102,16 @@ export default function Home() {
     e.preventDefault()
     if (!newLog.trim() || !selectedId) return
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('session_logs')
-      .insert([{ customer_id: selectedId, content: newLog }])
+      .insert([{ customer_id: selectedId, content: newLog.trim() }])
       .select()
 
-    if (data && data.length > 0) {
-      setLogs([...logs, data[0]])
+    if (!error && data && data.length > 0) {
+      setLogs((prev) => [...prev, data[0]])
       setNewLog('')
+    } else if (error) {
+      alert(`메모 저장 실패: ${error.message}`)
     }
   }
 
@@ -120,6 +137,7 @@ export default function Home() {
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             className="w-full p-2.5 border border-[#E6E2DB] rounded text-sm focus:outline-none focus:border-[#1F3A2B] bg-[#FAF8F5]/50"
+            required
           />
           <input
             type="text"
@@ -130,9 +148,10 @@ export default function Home() {
           />
           <button
             type="submit"
-            className="w-full py-2.5 bg-[#1F3A2B] text-[#FAF8F5] text-sm font-medium rounded hover:bg-[#4A6B5D] transition mt-1"
+            disabled={isSubmitting}
+            className="w-full py-2.5 bg-[#1F3A2B] text-[#FAF8F5] text-sm font-medium rounded hover:bg-[#4A6B5D] transition mt-1 disabled:opacity-50"
           >
-            고객 추가하기
+            {isSubmitting ? '저장 중...' : '고객 추가하기'}
           </button>
         </div>
       </form>

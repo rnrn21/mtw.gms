@@ -10,7 +10,7 @@ __turbopack_context__.s([
     ()=>hasSupabaseEnv
 ]);
 function getSupabaseEnv() {
-    const url = ("TURBOPACK compile-time value", "https://cjjcomapdhkxfufbhunn.supabase.co/rest/v1/");
+    const url = ("TURBOPACK compile-time value", "https://cjjcomapdhkxfufbhunn.supabase.co/rest/v1");
     const anonKey = ("TURBOPACK compile-time value", "sb_publishable_7qUxkQUoJdE-ElafNyEtOQ_c41YJUd5");
     if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
     ;
@@ -20,7 +20,7 @@ function getSupabaseEnv() {
     };
 }
 function hasSupabaseEnv() {
-    return Boolean(("TURBOPACK compile-time value", "https://cjjcomapdhkxfufbhunn.supabase.co/rest/v1/") && ("TURBOPACK compile-time value", "sb_publishable_7qUxkQUoJdE-ElafNyEtOQ_c41YJUd5"));
+    return Boolean(("TURBOPACK compile-time value", "https://cjjcomapdhkxfufbhunn.supabase.co/rest/v1") && ("TURBOPACK compile-time value", "sb_publishable_7qUxkQUoJdE-ElafNyEtOQ_c41YJUd5"));
 }
 }),
 "[project]/lib/supabase/proxy.ts [middleware] (ecmascript)", ((__turbopack_context__) => {
@@ -43,7 +43,7 @@ async function updateSession(request) {
     if (!(0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2f$env$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["hasSupabaseEnv"])()) {
         return supabaseResponse;
     }
-    const url = ("TURBOPACK compile-time value", "https://cjjcomapdhkxfufbhunn.supabase.co/rest/v1/");
+    const url = ("TURBOPACK compile-time value", "https://cjjcomapdhkxfufbhunn.supabase.co/rest/v1");
     const anonKey = ("TURBOPACK compile-time value", "sb_publishable_7qUxkQUoJdE-ElafNyEtOQ_c41YJUd5");
     const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$ssr$2f$dist$2f$module$2f$createServerClient$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["createServerClient"])(url, anonKey, {
         cookies: {
