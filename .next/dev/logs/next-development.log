@@ -1,0 +1,23 @@
+{"timestamp":"00:00:03.019","source":"Server","level":"LOG","message":"- Cache Components enabled"}
+{"timestamp":"00:00:03.019","source":"Server","level":"LOG","message":"- Partial Prefetching enabled"}
+{"timestamp":"00:00:03.019","source":"Server","level":"LOG","message":"- Experiments (use with caution):"}
+{"timestamp":"00:00:03.019","source":"Server","level":"LOG","message":"  ✓ agentFeedback"}
+{"timestamp":"00:00:03.019","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:03.020","source":"Server","level":"LOG","message":"✓ Generated agent feedback instructions in AGENTS.md. Set `experimental.agentFeedback: false` in next.config to disable."}
+{"timestamp":"00:00:07.426","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:00:15.501","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:05:10.626","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:08:29.140","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:08:42.774","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"01:21:18.455","source":"Server","level":"LOG","message":"  Reload env: .env.local"}
+{"timestamp":"01:21:27.469","source":"Server","level":"LOG","message":"✓ Compiled in 105ms"}
+{"timestamp":"01:21:39.025","source":"Server","level":"LOG","message":"✓ Compiled in 147ms"}
+{"timestamp":"01:21:58.999","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"02:58:17.937","source":"Server","level":"LOG","message":"  Reload env: .env.local"}
+{"timestamp":"02:58:18.291","source":"Server","level":"LOG","message":"✓ Compiled in 294ms"}
+{"timestamp":"02:58:33.160","source":"Server","level":"LOG","message":"  Reload env: .env.local"}
+{"timestamp":"02:58:33.345","source":"Server","level":"LOG","message":"✓ Compiled in 137ms"}
+{"timestamp":"03:16:44.691","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"03:17:15.106","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"04:27:50.842","source":"Server","level":"LOG","message":"✓ Compiled in 527ms"}
+{"timestamp":"04:30:01.981","source":"Server","level":"LOG","message":"✓ Compiled in 224ms"}
