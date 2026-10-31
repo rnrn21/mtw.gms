@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 const tabs = [
   { href: '/home', label: '홈' },
@@ -18,7 +19,26 @@ export function ClientShell({
   showHomeBanner?: boolean
 }) {
   const pathname = usePathname()
+  const router = useRouter()
   const [showBanner, setShowBanner] = useState(false)
+  const [isSigningOut, setIsSigningOut] = useState(false)
+  const [signOutError, setSignOutError] = useState<string | null>(null)
+
+  const signOut = async () => {
+    setIsSigningOut(true)
+    setSignOutError(null)
+    const { error } = await createClient().auth.signOut({ scope: 'local' })
+
+    if (error) {
+      console.error('고객 로그아웃 실패:', error.message)
+      setSignOutError('로그아웃하지 못했습니다. 다시 시도해 주세요.')
+      setIsSigningOut(false)
+      return
+    }
+
+    router.replace('/client/login')
+    router.refresh()
+  }
 
   useEffect(() => {
     const timeoutId = window.setTimeout(
@@ -57,8 +77,13 @@ export function ClientShell({
       <main className="min-h-screen px-5 pb-28 pt-7">{children}</main>
       <nav
         aria-label="고객 메뉴"
-        className="fixed inset-x-0 bottom-0 z-10 mx-auto grid max-w-[480px] grid-cols-3 border-t border-line bg-surface px-3 pb-[env(safe-area-inset-bottom)]"
+        className="fixed inset-x-0 bottom-0 z-10 mx-auto grid max-w-[480px] grid-cols-4 border-t border-line bg-surface px-3 pb-[env(safe-area-inset-bottom)]"
       >
+        {signOutError && (
+          <p role="alert" className="col-span-4 px-2 pt-2 text-center text-xs text-red-700">
+            {signOutError}
+          </p>
+        )}
         {tabs.map((tab) => {
           const isActive = pathname === tab.href
           return (
@@ -74,6 +99,14 @@ export function ClientShell({
             </Link>
           )
         })}
+        <button
+          type="button"
+          onClick={signOut}
+          disabled={isSigningOut}
+          className="py-3 text-center text-sm text-text-sub disabled:opacity-60"
+        >
+          {isSigningOut ? '로그아웃 중...' : '로그아웃'}
+        </button>
       </nav>
     </div>
   )

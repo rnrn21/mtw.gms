@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
@@ -11,8 +12,32 @@ const items = [
   { href: '/coach/inbox', label: '대기함' },
 ]
 
-export function CoachShell({ children }: { children: React.ReactNode }) {
+function CoachNavigation() {
   const pathname = usePathname()
+
+  return (
+    <nav aria-label="코치 메뉴" className="mt-5 flex gap-2 md:flex-col">
+      {items.map((item) => {
+        const isActive =
+          item.href === '/coach' ? pathname === item.href : pathname.startsWith(item.href)
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            aria-current={isActive ? 'page' : undefined}
+            className={`rounded-lg px-3 py-2 text-sm ${
+              isActive ? 'bg-brand-sage-tint font-medium text-brand-primary' : 'text-text-sub'
+            }`}
+          >
+            {item.label}
+          </Link>
+        )
+      })}
+    </nav>
+  )
+}
+
+export function CoachShell({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const [isSigningOut, setIsSigningOut] = useState(false)
   const [signOutError, setSignOutError] = useState<string | null>(null)
@@ -39,24 +64,9 @@ export function CoachShell({ children }: { children: React.ReactNode }) {
         <Link href="/coach" className="font-serif text-lg text-brand-primary">
           Mind Theory Works
         </Link>
-        <nav aria-label="코치 메뉴" className="mt-5 flex gap-2 md:flex-col">
-          {items.map((item) => {
-            const isActive =
-              item.href === '/coach' ? pathname === item.href : pathname.startsWith(item.href)
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={isActive ? 'page' : undefined}
-                className={`rounded-lg px-3 py-2 text-sm ${
-                  isActive ? 'bg-brand-sage-tint font-medium text-brand-primary' : 'text-text-sub'
-                }`}
-              >
-                {item.label}
-              </Link>
-            )
-          })}
-        </nav>
+        <Suspense fallback={<nav aria-label="코치 메뉴" className="mt-5 min-h-32" />}>
+          <CoachNavigation />
+        </Suspense>
         <div className="mt-4 md:mt-auto md:pt-6">
           {signOutError && (
             <p role="alert" className="mb-2 text-sm leading-[1.6] text-red-700">
