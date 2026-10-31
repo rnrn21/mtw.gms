@@ -1,28 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  --offwhite: #faf8f5;
-  --deepgreen: #1f3a2b;
-  --sage: #4a6b5d;
-  --gold: #d4af37;
+  --app: #faf8f5;
+  --surface: #ffffff;
   --line: #e6e2db;
+  --text-main: #1f2a24;
+  --text-sub: #5b6660;
+  --brand-primary: #1f3a2b;
+  --brand-sage: #4a6b5d;
+  --brand-sage-tint: #e8efea;
+  --accent-gold: #d4af37;
 }
 
 @theme inline {
-  --color-offwhite: var(--offwhite);
-  --color-deepgreen: var(--deepgreen);
-  --color-sage: var(--sage);
-  --color-gold: var(--gold);
+  --color-app: var(--app);
+  --color-surface: var(--surface);
   --color-line: var(--line);
-  --color-background: var(--offwhite);
-  --color-foreground: var(--deepgreen);
-  --color-border: var(--line);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-text-main: var(--text-main);
+  --color-text-sub: var(--text-sub);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-sage: var(--brand-sage);
+  --color-brand-sage-tint: var(--brand-sage-tint);
+  --color-accent-gold: var(--accent-gold);
+  --font-sans: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --font-serif: "Noto Serif KR", "AppleMyungjo", Georgia, serif;
 }
 
 body {
-  background: var(--offwhite);
-  color: var(--deepgreen);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  min-height: 100vh;
+  background: var(--app);
+  color: var(--text-main);
+  font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+@keyframes ring-check {
+  0% {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }

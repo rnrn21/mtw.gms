@@ -9,6 +9,16 @@ export async function updateSession(request: NextRequest) {
     return supabaseResponse
   }
 
+  const pathname = request.nextUrl.pathname
+  const isPublicRoute =
+    pathname === "/login" ||
+    pathname === "/client/login" ||
+    pathname === "/client/login/help" ||
+    pathname === "/login/forgot-password" ||
+    pathname === "/reset-password" ||
+    pathname === "/auth/callback" ||
+    pathname.startsWith("/invite/")
+
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
@@ -35,7 +45,21 @@ export async function updateSession(request: NextRequest) {
     },
   })
 
-  await supabase.auth.getClaims()
+  const { data, error } = await supabase.auth.getClaims()
+  if (error && error.name !== "AuthSessionMissingError") {
+    console.error("Supabase 세션 확인 실패:", error.message)
+  }
+
+  const hasSession = Boolean(data?.claims?.sub)
+
+  if (!hasSession && !isPublicRoute && pathname !== "/") {
+    const loginPath = pathname.startsWith("/coach") ? "/login" : "/client/login"
+    return NextResponse.redirect(new URL(loginPath, request.url))
+  }
+
+  if (hasSession && (pathname === "/login" || pathname === "/client/login")) {
+    return NextResponse.redirect(new URL("/", request.url))
+  }
 
   return supabaseResponse
 }

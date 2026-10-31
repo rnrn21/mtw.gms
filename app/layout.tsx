@@ -1,32 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Mind Theory Works",
-  description: "Mind Theory Works",
+  description: "세션 사이의 성장을 이어가는 코칭 공간",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="ko"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full bg-offwhite font-sans text-deepgreen">
-        <div className="mx-auto min-h-screen max-w-[480px] border-x border-[#E6E2DB] bg-[#FAF8F5]">
-          {children}
-        </div>
+    <html lang="ko" className="h-full antialiased">
+      <body className="min-h-full bg-app font-sans text-text-main">
+        {children}
       </body>
     </html>
   );
