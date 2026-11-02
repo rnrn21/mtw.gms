@@ -10,7 +10,7 @@ __turbopack_context__.s([
     ()=>hasSupabaseEnv
 ]);
 function getSupabaseEnv() {
-    const url = ("TURBOPACK compile-time value", "https://cjjcomapdhkxfufbhunn.supabase.co/rest/v1");
+    const url = ("TURBOPACK compile-time value", "https://cjjcomapdhkxfufbhunn.supabase.co");
     const anonKey = ("TURBOPACK compile-time value", "sb_publishable_7qUxkQUoJdE-ElafNyEtOQ_c41YJUd5");
     if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
     ;
@@ -20,7 +20,7 @@ function getSupabaseEnv() {
     };
 }
 function hasSupabaseEnv() {
-    return Boolean(("TURBOPACK compile-time value", "https://cjjcomapdhkxfufbhunn.supabase.co/rest/v1") && ("TURBOPACK compile-time value", "sb_publishable_7qUxkQUoJdE-ElafNyEtOQ_c41YJUd5"));
+    return Boolean(("TURBOPACK compile-time value", "https://cjjcomapdhkxfufbhunn.supabase.co") && ("TURBOPACK compile-time value", "sb_publishable_7qUxkQUoJdE-ElafNyEtOQ_c41YJUd5"));
 }
 }),
 "[project]/lib/supabase/proxy.ts [middleware] (ecmascript)", ((__turbopack_context__) => {
@@ -43,7 +43,9 @@ async function updateSession(request) {
     if (!(0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2f$env$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["hasSupabaseEnv"])()) {
         return supabaseResponse;
     }
-    const url = ("TURBOPACK compile-time value", "https://cjjcomapdhkxfufbhunn.supabase.co/rest/v1");
+    const pathname = request.nextUrl.pathname;
+    const isPublicRoute = pathname === "/login" || pathname === "/client/login" || pathname === "/client/login/help" || pathname === "/login/forgot-password" || pathname === "/reset-password" || pathname === "/auth/callback" || pathname.startsWith("/invite/");
+    const url = ("TURBOPACK compile-time value", "https://cjjcomapdhkxfufbhunn.supabase.co");
     const anonKey = ("TURBOPACK compile-time value", "sb_publishable_7qUxkQUoJdE-ElafNyEtOQ_c41YJUd5");
     const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$ssr$2f$dist$2f$module$2f$createServerClient$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["createServerClient"])(url, anonKey, {
         cookies: {
@@ -66,7 +68,18 @@ async function updateSession(request) {
             }
         }
     });
-    await supabase.auth.getClaims();
+    const { data, error } = await supabase.auth.getClaims();
+    if (error && error.name !== "AuthSessionMissingError") {
+        console.error("Supabase 세션 확인 실패:", error.message);
+    }
+    const hasSession = Boolean(data?.claims?.sub);
+    if (!hasSession && !isPublicRoute && pathname !== "/") {
+        const loginPath = pathname.startsWith("/coach") ? "/login" : "/client/login";
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL(loginPath, request.url));
+    }
+    if (hasSession && (pathname === "/login" || pathname === "/client/login")) {
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/", request.url));
+    }
     return supabaseResponse;
 }
 }),
